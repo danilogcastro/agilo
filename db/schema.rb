@@ -10,9 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_09_183819) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_09_192107) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "gyms", force: :cascade do |t|
+    t.string "address"
+    t.datetime "created_at", null: false
+    t.float "latitude"
+    t.float "longitude"
+    t.string "name"
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "memberships", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "gym_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["gym_id"], name: "index_memberships_on_gym_id"
+    t.index ["user_id"], name: "index_memberships_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -29,4 +47,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_09_183819) do
     t.index ["jti"], name: "index_users_on_jti", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
+
+  create_table "visits", force: :cascade do |t|
+    t.datetime "checked_in_at"
+    t.datetime "checked_out_at"
+    t.datetime "created_at", null: false
+    t.bigint "gym_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["gym_id"], name: "index_visits_on_gym_id"
+    t.index ["user_id"], name: "index_visits_on_user_id"
+  end
+
+  add_foreign_key "memberships", "gyms"
+  add_foreign_key "memberships", "users"
+  add_foreign_key "visits", "gyms"
+  add_foreign_key "visits", "users"
 end
