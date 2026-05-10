@@ -32,3 +32,4 @@ module Mapbox
     end
   end
 end
+
