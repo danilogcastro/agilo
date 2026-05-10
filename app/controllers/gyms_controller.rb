@@ -1,12 +1,14 @@
 class GymsController < ApplicationController
   before_action :authenticate_user!
-  
+
   def index
-    
+    @gyms = Gym.all
   end
 
   def show
-    
+    @gym = Gym.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: "Gym not found" }, status: :not_found
   end
 
   def create
